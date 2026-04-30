@@ -1,6 +1,6 @@
 {
   "name": "@toreador/mcp-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Official Model Context Protocol (MCP) server for Toreador — generate crypto QR codes and manage payment sessions from Claude Desktop, ChatGPT and other MCP clients.",
   "license": "MIT",
   "author": "Toreador <dev@toreador.io>",
@@ -31,9 +31,13 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "toreador-mcp-server": "./dist/index.js"
+    "toreador-mcp-server": "dist/index.js"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
