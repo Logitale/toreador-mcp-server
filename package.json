@@ -1,0 +1,54 @@
+{
+  "name": "@toreador/mcp-server",
+  "version": "0.2.0",
+  "description": "Official Model Context Protocol (MCP) server for Toreador — generate crypto QR codes and manage payment sessions from Claude Desktop, ChatGPT and other MCP clients.",
+  "license": "MIT",
+  "author": "Toreador <dev@toreador.io>",
+  "homepage": "https://toreador.io/mcp",
+  "bugs": {
+    "url": "https://github.com/Logitale/toreador-mcp-server/issues",
+    "email": "dev@toreador.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Logitale/toreador-mcp-server.git"
+  },
+  "keywords": [
+    "toreador",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "claude-desktop",
+    "chatgpt",
+    "crypto",
+    "qr-code",
+    "bitcoin",
+    "ethereum",
+    "solana",
+    "stablecoin"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "toreador-mcp-server": "./dist/index.js"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

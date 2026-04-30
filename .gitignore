@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output (regenerated via `npm run build` and shipped via npm publish only)
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editors
+.vscode/
+.idea/
+*.swp
