@@ -1,6 +1,6 @@
 {
   "name": "@toreador/mcp-server",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Official Model Context Protocol (MCP) server for Toreador — generate crypto QR codes and manage payment sessions from Claude Desktop, ChatGPT and other MCP clients.",
   "license": "MIT",
   "author": "Toreador <dev@toreador.io>",
