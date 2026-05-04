@@ -216,11 +216,19 @@ async function callTool(name: string, args: ToolArgs): Promise<{
         amount: args.amount,
         recipientAddress: args.recipientAddress,
       });
-    case "toreador_get_payment_status":
+    case "toreador_get_payment_status": {
+      // Validation explicite : sessionId Toreador = "ses_" + 32 hex chars (UUID v4 sans tirets).
+      // Refuser tôt évite des appels API inutiles et empêche l'injection de chemins
+      // crafted (même si encodeURIComponent en aval rendait l'attaque difficile).
+      const sessionId = String(args.sessionId || "");
+      if (!/^ses_[a-z0-9]{16,64}$/i.test(sessionId)) {
+        throw new Error("Invalid sessionId format (expected: ses_<hex>)");
+      }
       return toreadorRequest(
         "GET",
-        `/payment/${encodeURIComponent(String(args.sessionId))}/status`,
+        `/payment/${encodeURIComponent(sessionId)}/status`,
       );
+    }
     case "toreador_list_history":
       return toreadorRequest("GET", "/history");
     case "toreador_list_sessions":
