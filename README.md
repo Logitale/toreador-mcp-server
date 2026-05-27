@@ -5,6 +5,8 @@ Official [Model Context Protocol](https://modelcontextprotocol.io) server for
 MCP-capable assistant generate crypto QR codes and manage payment sessions on
 your behalf.
 
+[![toreador-mcp-server MCP server](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server)
+
 > ⚠️ Requires a **Pro plan API key** (`tdr_...`) from your Toreador
 > [dashboard](https://toreador.io/dashboard#api). The MCP server runs locally
 > and uses your key to call `https://toreador.io/api/v1/public`.
