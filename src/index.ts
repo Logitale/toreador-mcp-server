@@ -217,12 +217,11 @@ async function callTool(name: string, args: ToolArgs): Promise<{
         recipientAddress: args.recipientAddress,
       });
     case "toreador_get_payment_status": {
-      // Validation explicite : sessionId Toreador = "ses_" + 32 hex chars (UUID v4 sans tirets).
-      // Refuser tôt évite des appels API inutiles et empêche l'injection de chemins
-      // crafted (même si encodeURIComponent en aval rendait l'attaque difficile).
+      // Real session ids are 32 hex chars with no prefix; accept bare hex (32-64)
+      // and an optional `ses_` prefix. encodeURIComponent below blocks path injection.
       const sessionId = String(args.sessionId || "");
-      if (!/^ses_[a-z0-9]{16,64}$/i.test(sessionId)) {
-        throw new Error("Invalid sessionId format (expected: ses_<hex>)");
+      if (!/^(ses_)?[a-f0-9]{32,64}$/i.test(sessionId)) {
+        throw new Error("Invalid sessionId format (expected 32-64 hex chars, optional 'ses_' prefix)");
       }
       return toreadorRequest(
         "GET",
