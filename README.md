@@ -4,6 +4,8 @@ Official [Model Context Protocol](https://modelcontextprotocol.io) server for
 [Toreador](https://toreador.io). Lets Claude Desktop, Cursor and any MCP-capable
 assistant create crypto payment requests, track them and read your account on your behalf.
 
+[![toreador-mcp-server MCP server](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server)
+
 Non-custodial: every payment goes straight to a wallet registered on your Toreador account.
 The tools can create and read payment objects; none of them can move funds or change wallets.
 
