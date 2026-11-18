@@ -25,7 +25,7 @@ import {
   type Tool,
 } from "@modelcontextprotocol/sdk/types.js";
 
-const VERSION = "0.3.0";
+const VERSION = "0.3.1";
 
 // ---- Config ----
 
