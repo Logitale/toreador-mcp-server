@@ -1,0 +1,43 @@
+{
+  "name": "toreador",
+  "version": "0.1.0",
+  "description": "Ask for a crypto payment, check whether it was paid, and show a direct QR code, from Claude. Installs the official Toreador MCP server and three guided skills. Non-custodial: funds go from the payer's wallet to yours; no tool can move funds or change a wallet.",
+  "author": {
+    "name": "Toreador",
+    "email": "dev@toreador.io",
+    "url": "https://toreador.io"
+  },
+  "homepage": "https://toreador.io/mcp",
+  "repository": "https://github.com/Logitale/toreador-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "toreador",
+    "crypto",
+    "stablecoin",
+    "usdc",
+    "payment-request",
+    "qr-code",
+    "non-custodial"
+  ],
+  "userConfig": {
+    "toreador_api_key": {
+      "type": "string",
+      "title": "Toreador API key",
+      "description": "From your Toreador dashboard, API section. A key starting with tor_test_ works on test networks, outside your quota; a key starting with tor_live_ creates real payment requests.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "mcpServers": {
+    "toreador": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@toreador/mcp-server@^0.3.0"
+      ],
+      "env": {
+        "TOREADOR_API_KEY": "${user_config.toreador_api_key}"
+      }
+    }
+  }
+}

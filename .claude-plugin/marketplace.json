@@ -1,0 +1,17 @@
+{
+  "name": "toreador",
+  "owner": {
+    "name": "Toreador",
+    "email": "dev@toreador.io"
+  },
+  "metadata": {
+    "description": "The official Toreador plugin for Claude: payment requests in stablecoins, payment status and direct QR codes. Non-custodial."
+  },
+  "plugins": [
+    {
+      "name": "toreador",
+      "source": "./plugins/toreador",
+      "description": "Ask for a crypto payment, check whether it was paid, and show a direct QR code, from Claude. Non-custodial: funds go from the payer's wallet to yours."
+    }
+  ]
+}
