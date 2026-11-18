@@ -1,25 +1,30 @@
 # @toreador/mcp-server
 
 Official [Model Context Protocol](https://modelcontextprotocol.io) server for
-[Toreador](https://toreador.io). Lets Claude Desktop, Cursor, and any other
-MCP-capable assistant generate crypto QR codes and manage payment sessions on
-your behalf.
+[Toreador](https://toreador.io). Lets Claude Desktop, Cursor and any MCP-capable
+assistant create crypto payment requests, track them and read your account on your behalf.
 
-[![toreador-mcp-server MCP server](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/Logitale/toreador-mcp-server)
+Non-custodial: every payment goes straight to a wallet registered on your Toreador account.
+The tools can create and read payment objects; none of them can move funds or change wallets.
 
-> ⚠️ Requires a **Pro plan API key** (`tdr_...`) from your Toreador
-> [dashboard](https://toreador.io/dashboard#api). The MCP server runs locally
-> and uses your key to call `https://toreador.io/api/v1/public`.
+> Requires a Toreador API key (`tor_live_…` or `tor_test_…`) from your dashboard, API section.
+> A test key works on testnets, outside your quota, with the exact same tools. Each key only sees the payments
+> of its own environment: a live key never returns test payments, a test key returns only test payments.
 
-## Tools exposed
+## Tools
 
 | Tool | What it does |
 |---|---|
-| `toreador_generate_qr` | Generate a QR code for native tokens (BTC, ETH, SOL, POL) or Solana SPL (USDC on Solana). Returns the on-chain payment URI and a base64 PNG data URI. |
-| `toreador_create_session` | Create a hosted payment session for ERC-20 stablecoins (USDC, USDT, EURC) on Ethereum, Polygon or Base. Returns a session ID, security code and a hosted payment URL. |
-| `toreador_get_payment_status` | Poll the status of an ERC-20 payment session: `pending` / `submitted` / `confirming` / `completed` / `expired` / `failed`. |
-| `toreador_list_history` | List the 50 most recent QR code generations. |
-| `toreador_list_sessions` | List the 50 most recent ERC-20 payment sessions. |
+| `toreador_create_checkout` | Create a payment request for an invoice in USD or EUR. Returns the hosted payment page URL; the payer picks the stablecoin and network, and funds go straight to your wallet. The main tool. |
+| `toreador_get_payment` | Status, token, chain, amount, transaction hash and timeline of a payment, by checkout id or session id. |
+| `toreador_list_payments` | Recent payment sessions of the whole team, with reference-rate provenance, checkout id, reference and establishment. Paginated; can be limited to one establishment. |
+| `toreador_list_wallets` | Receiving wallets registered on the account. The recipient of any payment must be one of them. |
+| `toreador_list_establishments` | Establishments (points of sale) of the organization. An id limits `toreador_list_payments` to one of them, or attaches a new checkout to it. |
+| `toreador_list_tokens` | Payable (token, chain) pairs for the key's environment, chain names and explorer links. |
+| `toreador_get_account` | Plan, environment, subscription, monthly quota and limits. |
+| `toreador_generate_qr` | Untracked QR code for a native token (BTC, ETH, SOL, POL…) or USDC on Solana. |
+| `toreador_create_session` | Advanced: a payment session for an exact stablecoin amount on a given EVM chain. |
+| `toreador_screen_address` | Sanctions screening (OFAC, EU, UN) of an address. |
 
 ## Install in Claude Desktop
 
@@ -29,8 +34,6 @@ Edit Claude Desktop's config file:
 - **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
 - **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-Add the `toreador` entry under `mcpServers`:
-
 ```json
 {
   "mcpServers": {
@@ -38,68 +41,80 @@ Add the `toreador` entry under `mcpServers`:
       "command": "npx",
       "args": ["-y", "@toreador/mcp-server"],
       "env": {
-        "TOREADOR_API_KEY": "tdr_your_key_here"
+        "TOREADOR_API_KEY": "tor_live_your_key_here"
       }
     }
   }
 }
 ```
 
-Restart Claude Desktop. You should see the 5 Toreador tools in the tools menu.
+Restart Claude Desktop: the ten Toreador tools appear in the tools menu.
+
+## Install in Claude Code (plugin)
+
+The plugin installs this server and three guided skills (request a payment, check a payment,
+show a direct QR code). Claude Code asks for your API key and keeps it in your system's
+credential store.
+
+```
+/plugin marketplace add Logitale/toreador-mcp-server
+/plugin install toreador@toreador
+```
+
+Details in [plugins/toreador](plugins/toreador/README.md).
 
 ## Install in Cursor
 
-In Cursor settings → MCP → "Add new MCP server", paste:
+Cursor settings → MCP → "Add new MCP server":
 
 ```json
 {
   "command": "npx",
   "args": ["-y", "@toreador/mcp-server"],
-  "env": { "TOREADOR_API_KEY": "tdr_..." }
+  "env": { "TOREADOR_API_KEY": "tor_live_..." }
 }
 ```
 
 ## Example prompts
 
-Once installed, try these prompts in your MCP client:
-
-- *"Generate a Bitcoin QR code for 0.001 BTC to bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh."*
-- *"Create a USDC payment session for 50 USDC on Polygon to 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18."*
-- *"What's the status of session ses_123?"*
-- *"Show me my last 10 payment sessions."*
-
-The assistant will pick the right tool, call Toreador, and return the result —
-including the QR code data URI which most clients can render inline.
+- *"Create a 49.90 USD crypto checkout for order 1042 to my main wallet and give me the payment link."*
+- *"Has checkout co_… been paid?"*
+- *"Which stablecoins and networks can my customers pay with?"*
+- *"How much of my monthly quota is left?"*
+- *"Show me this week's payments of the Lyon shop."*
+- *"Is this address sanctioned: 0x…?"*
 
 ## Configuration
 
 | Environment variable | Default | Description |
 |---|---|---|
-| `TOREADOR_API_KEY` | **required** | Your Pro plan API key. Format: `tdr_...`. |
-| `TOREADOR_BASE_URL` | `https://toreador.io/api/v1/public` | Override the API base URL (useful for testing). |
+| `TOREADOR_API_KEY` | **required** | `tor_live_…` or `tor_test_…`. |
+| `TOREADOR_BASE_URL` | `https://toreador.io/api/v1/public` | API base URL override (testing). |
 | `TOREADOR_TIMEOUT_MS` | `30000` | Per-request timeout in milliseconds. |
 
 ## Trust and safety
 
-- **Local only.** The MCP server runs on your machine via stdio. Your API key
-  never leaves your computer except in outbound HTTPS calls to `toreador.io`.
-- **Non-custodial.** Toreador never holds funds. The MCP tools only generate
-  QR codes and read session state — they cannot move money.
-- **Read or create, no destruction.** Tools either generate new payment objects
-  or read existing ones. There is no "delete" or "refund" tool.
+- **Local only.** The server runs on your machine over stdio. Your API key only leaves it in
+  outbound HTTPS calls to `toreador.io`.
+- **Non-custodial.** Toreador never holds funds, and the API key cannot move money nor change
+  your wallets: a payment can only target a wallet already registered on your account.
+- **No destructive tool.** Tools create payment objects or read them. Nothing deletes, refunds
+  or transfers.
+- **Errors are explained.** Quota reached (402), rate limit (429), revoked key (401) and
+  configuration problems come back with the cause and the action to take.
 
 ## Build from source
 
 ```bash
-git clone https://github.com/Bentonabento/toreador-sdk.git
-cd toreador-sdk/mcp
+git clone https://github.com/Logitale/toreador-mcp-server.git
+cd toreador-mcp-server
 npm install
 npm run build
-TOREADOR_API_KEY=tdr_... node dist/index.js
+TOREADOR_API_KEY=tor_test_... node dist/index.js
 ```
 
-The server will boot, print `[toreador-mcp] ready (5 tools registered)` to
-stderr, and wait for MCP requests on stdin.
+The server prints `[toreador-mcp] ready · env=test · 10 tools (…)` to stderr and waits for MCP
+requests on stdin.
 
 ## License
 

@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.toreador/mcp-server",
-  "description": "Generate crypto QR codes (BTC, ETH, SOL, USDC, USDT, EURC) and manage payment sessions.",
-  "version": "0.2.6",
+  "description": "Create crypto checkouts paid in stablecoins (USDC, USDT, EURC…) or native crypto, track payments, list wallets and supported networks. Non-custodial.",
+  "version": "0.3.0",
   "repository": {
     "url": "https://github.com/Logitale/toreador-mcp-server",
     "source": "github"
@@ -11,7 +11,7 @@
     {
       "registryType": "npm",
       "identifier": "@toreador/mcp-server",
-      "version": "0.2.6",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       }

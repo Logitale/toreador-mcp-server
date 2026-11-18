@@ -1,8 +1,8 @@
 {
   "name": "@toreador/mcp-server",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "mcpName": "io.toreador/mcp-server",
-  "description": "Official Model Context Protocol (MCP) server for Toreador — generate crypto QR codes and manage payment sessions from Claude Desktop, ChatGPT and other MCP clients.",
+  "description": "Official Model Context Protocol (MCP) server for Toreador: create crypto checkouts paid in stablecoins, track payments, list wallets and supported networks from Claude Desktop, Cursor and other MCP clients. Non-custodial: funds go wallet-to-wallet, Toreador never holds them.",
   "license": "MIT",
   "author": "Toreador <dev@toreador.io>",
   "homepage": "https://toreador.io/mcp",
@@ -20,13 +20,14 @@
     "model-context-protocol",
     "claude",
     "claude-desktop",
-    "chatgpt",
+    "cursor",
     "crypto",
-    "qr-code",
-    "bitcoin",
-    "ethereum",
-    "solana",
-    "stablecoin"
+    "crypto-payments",
+    "stablecoin",
+    "usdc",
+    "checkout",
+    "non-custodial",
+    "qr-code"
   ],
   "type": "module",
   "main": "./dist/index.js",
@@ -47,11 +48,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0"
+    "@modelcontextprotocol/sdk": "^1.32.2"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
   },
   "engines": {
     "node": ">=18.0.0"
